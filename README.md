@@ -1,14 +1,15 @@
-# ⚙️ MoonVoyage Operations — Scalable MERN Backend Architecture Blueprint
+# 🌌 MoonVoyage Operations — Scalable Full-Stack AI Itinerary & E-Commerce Ecosystem
 
-Welcome to the core server-side subsystem for the **MoonVoyage Operations Platform**. This engine is built on **Node.js (v24+)**, powered by **Express.js**, and engineered around an optimized **Mongoose / MongoDB** storage layer. 
-
-The backend acts as the central execution desk: processing deterministic JSON generation layers using the Google Gemini SDK, managing cryptographic ledger signatures for financial systems, and enforcing strict role-based access tokens across all routes.
+Welcome to the production-ready master architectural blueprint for the **MoonVoyage Operations Platform**. This enterprise ecosystem combines an intelligent client dashboard, deterministic generative AI orchestration engines, role-based administrative workspaces, and a cryptographic e-commerce payment infrastructure built entirely on the modern MERN stack.
 
 ---
 
-## 🏗️ Architectural Pattern & Route Topologies
+## 🏛️ System & Architecture Topology
 
-The server uses an enterprise MVC (Model-View-Controller) design pattern. Request filtering pipelines protect database safety boundaries by using custom middleware blocks before hits register on route definitions.
+The application relies on a micro-monolith layout pattern. Request filtering pipelines protect database boundaries by enforcing strict JSON verification rules, cross-origin security walls, and role-based validation hooks before client hits register on Express route controllers.
+
+### 1. Modular Request Orchestration Trace
+The diagram below shows how an incoming client interaction safely filters through the twin-guard authentication security firewalls:
 
 ```mermaid
 graph TD
@@ -23,96 +24,13 @@ graph TD
     style E fill:#d97706,stroke:#fff,stroke-width:2px,color:#fff
     style G fill:#f3e8ff,stroke:#c084fc,stroke-width:1px
 
-
-erDiagram
-    USER ||--o{ TRIP : "owns / generates"
-    USER {
-        ObjectId _id PK
-        String name
-        String email
-        String password
-        String role "user | admin"
-        Boolean isAccountActive
-    }
-    TRIP ||--o{ ACTIVITY : "contains structural daily tracking arrays"
-    TRIP {
-        ObjectId _id PK
-        ObjectId userId FK "Creator / Admin Link"
-        ObjectId assignedTo FK "Target User Allocation"
-        Boolean isPublic
-        Boolean isPurchased
-        String destination
-        Number price
-        Number totalSeats
-        Number seatsAllotted
-        Object budgetBreakdown "Embedded Array Logs"
-        Array hotels "Embedded Hotel Objects"
-    }
-    TRIP ||--o{ BOOKING_MANIFEST : "embeds verification records directly"
-    BOOKING_MANIFEST {
-        ObjectId userId FK "Buyer Reference"
-        String razorpayOrderId
-        String razorpayPaymentId
-        Number amountPaid
-        Date purchasedAt
-    }
-
-
-
-    sequenceDiagram
-    autonumber
-    participant Controller as tripController.js
-    participant Service as aiService.js
-    participant SDK as @google/genai Engine
-    participant LLM as gemini-2.5-flash Model
-
-    Controller->>Service: Invokes generateNewItinerary({ destination, duration, budgetType })
-    Note over Service: Construct target prompt template<br/>Inject custom Tokyo hotel seeding blocks if mapped
-    Service->>SDK: models.generateContent() Configuration Parameter Object
-    Note over SDK: Bind responseMimeType: "application/json"<br/>Inject travelItinerarySchema definition tree
-    SDK->>LLM: Directives Transmitted to Processing Grid
-    LLM-->>SDK: Emits Validated JSON String Output
-    SDK-->>Service: Content Returned to Runtime Instance
-    Service->>Controller: Parse JSON string & pass back pure data object
-
-
-
-    sequenceDiagram
-    autonumber
-    participant Client as Frontend JavaScript Client
-    participant Controller as tripController.js
-    participant Crypto as Node.js Crypto Core Engine
-    participant DB as MongoDB Instance
-
-    Client->>Controller: POST /payment/verify (OrderId, PaymentId, Signature)
-    Note over Controller: Construct Token string:<br/>order_id + "|" + payment_id
-    Controller->>Crypto: createHmac('sha256', secret).update(Token).digest('hex')
-    Crypto-->>Controller: Returns Computed Checksum Signature String
-    Note over Controller: Perform explicit bitwise verification balance check:<br/>computedSignature === razorpay_signature
-    alt Signature Validations Match
-        Controller->>DB: Pull Trip document context up into memory grid
-        Note over DB: Check if user already exists in bookingManifest array
-        DB->>DB: Push PaymentLog receipt, increment seatsAllotted / set isPurchased = true
-        DB-->>Controller: Document changes saved successfully
-        Controller-->>Client: HTTP 200 (Success Status + Updated Document Data Payload)
-    else Signature Security Breach Mismatch
-        Controller-->>Client: HTTP 400 (Gateway Checksum Signature Validation Mismatch)
-    </td>
-
-
-    graph LR
-    A[Admin Deletes User ID] --> B[User.findByIdAndDelete]
-    B --> C[Trip.deleteMany: userId == Target User ID]
-    B --> D[Payment.deleteMany: userId == Target User ID]
-    C --> E[Platform Storage Synced cleanly with zero data fragmentation]
-    D --> E
+    graph TD
+    A[Express Database Server] -->|Single Array Payload| B[src/app/dashboard/page.jsx]
+    B -->|Filter: userId == creator && !isPublic| C[📦 Personal Generative Sandboxes]
+    B -->|Filter: isPublic == true| D[🌟 Featured Public Marketplace Tours]
+    B -->|Filter: assignedTo == user._id| E[🎁 Direct Admin Assignments]
     
-    style A fill:#d97706,stroke:#fff,stroke-width:1px,color:#fff
-    style E fill:#059669,stroke:#fff,stroke-width:1px,color:#fff
-
-
-
-    ### 🎯 Key Visual Integration Wins:
-*   **Mermaid ERD Definitions:** Clearly explains how `bookingManifest` and `itinerary` stay securely packed inside the main `Trip` schema as nested array logs.
-*   **Cryptographic Workflows:** Maps out the step-by-step verification logic, highlighting how incoming payloads combine with `process.env.RAZORPAY_KEY_SECRET` to verify signatures before modifying data.
-*   **AI Engine Blueprint:** Outlines the exact sequence of controller actions that handle normalization, Gemini validation schemas, and database hydration.
+    style B fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff
+    style C fill:#f3e8ff,stroke:#c084fc,stroke-width:1px
+    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:1px
+    style E fill:#e0e7ff,stroke:#818cf8,stroke-width:1px
