@@ -12,15 +12,14 @@ The application relies on a micro-monolith layout pattern. Request filtering pip
 The diagram below shows how an incoming client interaction safely filters through the twin-guard authentication security firewalls:
 
 ```mermaid
-
-
-    graph TD
-    A[Express Database Server] -->|Single Array Payload| B[src/app/dashboard/page.jsx]
-    B -->|Filter: userId == creator && !isPublic| C[📦 Personal Generative Sandboxes]
-    B -->|Filter: isPublic == true| D[🌟 Featured Public Marketplace Tours]
-    B -->|Filter: assignedTo == user._id| E[🎁 Direct Admin Assignments]
+graph TD
+    A[Client Request HTTP] --> B[Express Core Router]
+    B -->|Path Validation Pass| C[Middleware Guard: protect]
+    C -->|JWT Token Signature Verified| D{Admin Access Path?}
+    D -->|Yes| E[Middleware Guard: admin]
+    D -->|No| F[General User Controller Stack]
+    E -->|Validation Pass| G[Administrative Controller Stack]
     
-    style B fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff
-    style C fill:#f3e8ff,stroke:#c084fc,stroke-width:1px
-    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:1px
-    style E fill:#e0e7ff,stroke:#818cf8,stroke-width:1px
+    style C fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff
+    style E fill:#d97706,stroke:#fff,stroke-width:2px,color:#fff
+    style G fill:#f3e8ff,stroke:#c084fc,stroke-width:1px
