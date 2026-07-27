@@ -23,3 +23,4 @@ graph TD
     style C fill:#7c3aed,stroke:#fff,stroke-width:2px,color:#fff
     style E fill:#d97706,stroke:#fff,stroke-width:2px,color:#fff
     style G fill:#f3e8ff,stroke:#c084fc,stroke-width:1px
+
